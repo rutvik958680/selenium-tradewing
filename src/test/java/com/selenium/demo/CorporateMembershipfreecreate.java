@@ -11,10 +11,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class Membershipcreatenormalfree {
+
+public class CorporateMembershipfreecreate {
+
 	
-	
-	  public static void main(String[] args) throws InterruptedException {
+	 public static void main(String[] args) throws InterruptedException {
 	        System.out.println("Login functionality to be implemented.");
 	        System.setProperty("webdriver.chrome.silentOutput", "true");
 	        java.util.logging.Logger.getLogger("org.openqa.selenium").setLevel(java.util.logging.Level.SEVERE);
@@ -67,11 +68,15 @@ public class Membershipcreatenormalfree {
 	        		));
 	        		addMembershipType.click();
 	        		Thread.sleep(4000);
-	        		WebElement individualMembership = wait.until(ExpectedConditions.elementToBeClickable(
-	        			    By.xpath("//p[normalize-space(text())='Individual Membership']")
-	        			));
-	        			individualMembership.click();
-	        			Thread.sleep(2000);
+	        		// Locate Corporate Membership by its text
+	        		WebElement corporateMembership = wait.until(
+	        		    ExpectedConditions.visibilityOfElementLocated(
+	        		        By.xpath("//p[normalize-space()='Corporate Membership']")
+	        		    )
+	        		);
+
+	        		// Click if it's clickable (or use for assertion)
+	        		corporateMembership.click();
 	        			Thread.sleep(2000);
 	        			WebElement membershipName = wait.until(
 	        				    ExpectedConditions.elementToBeClickable(By.xpath("//input[@name='name']"))
@@ -81,40 +86,42 @@ public class Membershipcreatenormalfree {
 	        				membershipName.sendKeys(Keys.chord(Keys.CONTROL, "a")); // select all
 	        				membershipName.sendKeys(Keys.DELETE); // delete old value
 	        				Thread.sleep(500);                     // small wait for React
-	        				membershipName.sendKeys("Test indivisual Membership for new Dragon two free");
+	        				membershipName.sendKeys("Test Corporate Membership for new Dragon two free");
+
 	        				Thread.sleep(2000);
-	        				WebElement lifetimeLabel = wait.until(ExpectedConditions.presenceOfElementLocated(
-	        					    By.xpath("//label[.//span[text()='Lifetime']]")
-	        					));
-	        					((JavascriptExecutor) driver).executeScript("arguments[0].click();", lifetimeLabel);
-	        					Thread.sleep(2000);
-	        					// Wait for the visible checkbox control span
-	        					WebElement checkbox = wait.until(
-	        					    ExpectedConditions.elementToBeClickable(
-	        					        By.xpath("//span[contains(@class,'chakra-checkbox__control')]")
-	        					    )
+	        				WebElement seatsInput = wait.until(
+	        					    ExpectedConditions.elementToBeClickable(By.name("numberOfSeats"))
 	        					);
+	        					seatsInput.clear();
+	        					seatsInput.sendKeys("10");   // put any number you need
+	        					
+	        					Thread.sleep(2000);
+	        					WebElement lifetimeLabel = wait.until(ExpectedConditions.presenceOfElementLocated(
+		        					    By.xpath("//label[.//span[text()='Lifetime']]")
+		        					));
+		        					((JavascriptExecutor) driver).executeScript("arguments[0].click();", lifetimeLabel);
+		        					Thread.sleep(2000);
+		        					WebElement secondCheckbox = wait.until(
+		        						    ExpectedConditions.elementToBeClickable(
+		        						        By.xpath("(//span[contains(@class,'chakra-checkbox__control')])[2]")
+		        						    )
+		        						);
 
-	        					// Use JS click on the visible span
-	        					JavascriptExecutor js = (JavascriptExecutor) driver;
-	        					js.executeScript("arguments[0].click();", checkbox);
-	        						Thread.sleep(2000);
-	        						WebElement createBtn = wait.until(ExpectedConditions.elementToBeClickable(
-	        							    By.xpath("//button[normalize-space()='Create']")
-	        							));
-	        							createBtn.click();
-	        							Thread.sleep(6000);
+		        						// Use JS click to avoid overlay issues
+		        						((JavascriptExecutor) driver).executeScript("arguments[0].click();", secondCheckbox);
 
-	        					driver.quit();
+			        					Thread.sleep(3000);
+		        						WebElement createBtn = wait.until(ExpectedConditions.elementToBeClickable(
+		        							    By.xpath("//button[normalize-space()='Create']")
+		        							));
+		        							createBtn.click();
+		        							Thread.sleep(6000);
 
-	        			
-	 
-	  
-	  
-	  }
+		        					driver.quit();
+
 	
-	
-	
+	        					
+	 }
 	
 
 }
